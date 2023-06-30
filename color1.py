@@ -1,155 +1,92 @@
 import tkinter
 import random
-import os
-import google.auth
-from google.auth.transport.requests import Request
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
 
-# List of possible colors.
-colors = ['Red', 'Blue', 'Green', 'Pink', 'Black',
-          'Yellow', 'Orange', 'White', 'Purple', 'Brown']
+# List of possible colours.
+colours = ['Red', 'Blue', 'Green', 'Pink', 'Black',
+           'Yellow', 'Orange', 'White', 'Purple', 'Brown']
 score = 0
-time_left = 30
-# Replace with the actual path to your credentials file
-credentials_file = 'path/to/credentials.json'
+timeleft = 30
 
-# Load credentials from JSON file
-credentials = service_account.Credentials.from_service_account_file(
-    credentials_file, scopes=['https://www.googleapis.com/auth/spreadsheets'])
-
-# Authorize the client
-credentials.refresh(Request())
-google.auth.default(
-    scopes=['https://www.googleapis.com/auth/spreadsheets'], credentials=credentials)
-
-# Create the Google Sheets service
-service = build('sheets', 'v4', credentials=credentials)
-# Replace with your actual Google Sheets spreadsheet ID
-spreadsheet_id = 'your_spreadsheet_id'
-
-# Function to update the leaderboard in the Google Sheets
-
-
-def update_leaderboard():
-    values = [
-        ['Player', 'Score'],
-        ['Player1', 10],
-        ['Player2', 8],
-        ['Player3', 6],
-        # Add more rows as needed
-    ]
-    body = {
-        'values': values
-    }
-    service.spreadsheets().values().update(
-        spreadsheetId=spreadsheet_id,
-        range='Sheet1!A1:B',
-        valueInputOption='RAW',
-        body=body
-    ).execute()
-
-# Function that will start the game
-
-
-def start_game(event):
-    global time_left
-    if time_left == 30:
-        # Start the countdown timer.
+def startGame(event):
+    # Function to start the game when the enter key is pressed
+    if timeleft == 30:
         countdown()
-
-# Function to choose and display the next color.
-
+    nextColour()
 
 def nextColour():
-
-    # use the globally declared 'score'
-    # and 'play' variables above.
+    # Function to choose and display the next colour
     global score
     global timeleft
-
-    # if a game is currently in play
     if timeleft > 0:
-
-        # make the text entry box active.
         e.focus_set()
-
-        # if the colour typed is equal
-        # to the colour of the text
-        if e.get().lower() == colors[1].lower():
-
+        # Check if the entered colour matches the displayed colour
+        if e.get().lower() == colours[1].lower():
             score += 1
-
-        # clear the text entry box.
         e.delete(0, tkinter.END)
-
-        random.shuffle(colors)
-
-        # change the colour to type, by changing the
-        # text _and_ the colour to a random colour value
-        time_label.config(fg=str(colors[1]), text=str(colors[0]))
-
-        # update the score.
+        random.shuffle(colours)
+        # Change the displayed colour and update the score
+        label.config(fg=str(colours[1]), text=str(colours[0]))
         score_label.config(text="Score: " + str(score))
 
-# Countdown timer function
-
 def countdown():
-    global time_left
-
-    if time_left > 0:
-        # Decrement the timer.
-        time_left -= 1
-
-        # Update the time left label
-        time_label.config(text="Time left: " + str(time_left))
-
-        # Run the function again after 1 second.
+    # Countdown timer function
+    global timeleft
+    if timeleft > 0:
+        timeleft -= 1
+        time_label.config(text="Time left: " + str(timeleft))
         time_label.after(1000, countdown)
+    else:
+        openSecondScreen()
 
+def openSecondScreen():
+    # Function to open the second screen and display the user's score
+    root.withdraw()  # Hide the main window
 
-# Create a GUI window
+    # Create the second screen window
+    second_screen = tkinter.Toplevel()
+    second_screen.title("Second Screen")
+    second_screen.geometry("1600x1600")
+
+    #Leaderboard label
+    leaderboard_label = tkinter.Label(second_screen, text="LEADERBOARD: ", font=('Helvetica', 40))
+    leaderboard_label.pack(pady=10)
+    # Add score label to display the user's score
+    score_label = tkinter.Label(second_screen, text="Your Score: " + str(score), font=('Helvetica', 20))
+    score_label.pack(pady=10)
+
+# Create the main window
 root = tkinter.Tk()
+root.title("COLORGAME")
+root.geometry("1600x1600")
+root.configure(background='red')
 
-# Set the title
-root.title("Color Game")
-
-# Set the size
-root.geometry("800x500")
-
-# Set background color
-root.configure(background='blue')
-
-# Add instructions label
-instructions = tkinter.Label(
-    root, text="Type in the color of the words, and not the word text!", font=('Helvetica', 20))
+blank_label=tkinter.Label(root,text="")
+instructions = tkinter.Label(root, text="Type in the colour of the words, and not the word text!", font=('Helvetica', 20))
 instructions.pack()
 
-# Add score label
-score_label = tkinter.Label(
-    root, text="Press enter to start", font=('Helvetica', 20))
+score_label = tkinter.Label(root, text="Press enter to start", font=('Helvetica', 20))
 score_label.pack()
+blank_label.pack()
 
-# Add time left label
-time_label = tkinter.Label(
-    root, text="Time left: " + str(time_left), font=('Helvetica', 20))
+options_label=tkinter.Label(root, text="Choose From: " + ", ".join(colours), font=('Helvetica', 20))
+options_label.pack()
+blank_label.pack()
+time_label = tkinter.Label(root, text="Time left: " + str(timeleft), font=('Helvetica', 20))
 time_label.pack()
 
-# add a label for displaying the colours
+blank_label.pack()
+blank_label.pack()
+blank_label.pack()
+blank_label.pack()
+
 label = tkinter.Label(root, font=('Helvetica', 60))
 label.pack()
 
-# add a text entry box for
-# typing in colours
+
+
 e = tkinter.Entry(root)
-
-# run the 'startGame' function
-# when the enter key is pressed
-root.bind('<Return>', start_game)
+root.bind('<Return>', startGame)
 e.pack()
-
-# set focus on the entry box
 e.focus_set()
 
-# start the GUI
 root.mainloop()
