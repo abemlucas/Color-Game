@@ -1,7 +1,7 @@
 # The COLOR Game
 
 ## Prerequisites
-- pip install pillow
+
 
 ## Overview:
 
