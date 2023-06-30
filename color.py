@@ -16,16 +16,13 @@ timeleft = 30
 def startGame(event):
 
     if timeleft == 30:
-
         # start the countdown timer.
         countdown()
 
-    # run the function to
     # choose the next colour.
     nextColour()
 
-# Function to choose and
-# display the next colour.
+# Function to choose and display the next colour.
 
 
 def nextColour():
@@ -79,6 +76,27 @@ def countdown():
         timeLabel.after(1000, countdown)
 
 
+def openSecondScreen():
+    root.withdraw()  # Hide the main window
+
+    second_screen = tkinter.Toplevel()  # Create the second screen
+    second_screen.title("Second Screen")
+
+    # Add widgets and customize the second screen
+    second_label = tkinter.Label(
+        second_screen, text="This is the second screen")
+    second_label.pack()
+
+    # Add a button to go back to the main screen
+    back_button = tkinter.Button(second_screen, text="Go Back", command=goBack)
+    back_button.pack()
+
+
+def goBack():
+    root.deiconify()  # Show the main window
+    second_screen.destroy()  # Destroy the second screen
+
+
 # Driver Code
 
 # create a GUI window
@@ -88,22 +106,25 @@ root = tkinter.Tk()
 root.title("COLORGAME")
 
 # set the size
-root.geometry("375x200")
+root.geometry("800x500")
+
+# set background color
+root.configure(background='blue')
+
 
 # add an instructions label
-instructions = tkinter.Label(root, text="Type in the colour"
-                             "of the words, and not the word text!",
-                             font=('Helvetica', 12))
+instructions = tkinter.Label(root, text="Type in the colour of the words, and not the word text!",
+                             font=('Helvetica', 20))
 instructions.pack()
 
 # add a score label
 scoreLabel = tkinter.Label(root, text="Press enter to start",
-                           font=('Helvetica', 12))
+                           font=('Helvetica', 20))
 scoreLabel.pack()
 
 # add a time left label
 timeLabel = tkinter.Label(root, text="Time left: " +
-                          str(timeleft), font=('Helvetica', 12))
+                          str(timeleft), font=('Helvetica', 20))
 
 timeLabel.pack()
 
