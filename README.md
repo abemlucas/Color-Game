@@ -5,7 +5,7 @@
 
 ## Overview:
 
-A one-player game to test users on their typing, concentration, and memory. Players are presented with a word that may or may not coordinate with the visual color font. The player must type the color of the word, rather than the color that is spelled by the word. A countdown timer will be set for each round that the player plays, limiting their time to think and forcing time optimization when typing in colors. Highscores for all game history will be stored and presented once the player types an error,
+A one-player game to test users on their typing, concentration, and memory. Players are presented with a joke that may or may not coordinate with the visual color font. The player must type the color of the word, rather than the color that is spelled by the word. A countdown timer will be set for each round that the player plays, limiting their time to think and forcing time optimization when typing in colors. Highscores for all game history will be stored and presented once the player types an error,
 
 ## Audience:
 
@@ -34,7 +34,8 @@ Keyboarding students
 
 - Frontend: Tkinter GUI
 - Backend: Python imported random
-- API: N/A
+- API: "icanhazdadjoke"
+- URL: https:icanhazdadjoke.com/
 
 # Operations:
 
